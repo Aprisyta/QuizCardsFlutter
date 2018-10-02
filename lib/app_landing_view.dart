@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import './model/deck.dart';
 import 'decks_view.dart';
 import 'new_deck_view.dart';
 
 class HomeScreen extends StatelessWidget {
-
-  final List<Deck> decks;
-
-  HomeScreen(this.decks);
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +20,11 @@ class HomeScreen extends StatelessWidget {
           ),
           body: TabBarView(
               children: <Widget>[
-                new DecksScreen(decks),
+                new DecksScreen(),
                 new NewDeckScreen(),
               ]
           ),
         )
     );
   }
-
 }

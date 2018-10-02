@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import './model/deck.dart';
-import './model/card.dart';
+import './mocks/mock_decks.dart';
+import 'deck_entry_view.dart';
 
 class DecksScreen extends StatelessWidget {
 
-  final List<Deck> decks;
-
-  DecksScreen(this.decks);
+  final List<Deck> decks = MockDecks.fetchDecks();
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +19,7 @@ class DecksScreen extends StatelessWidget {
     Deck currentDeck = decks[index];
     return new Container(
       child: ListTile(
-        onTap: () {
-          // open page
-        },
+        onTap: () => _navigateToSelectedDeckEntryScreen(context, currentDeck),
         title: Center(child: Text("${currentDeck.deckTitle}")),
         subtitle: Center(child: Text("${currentDeck.cards.length} cards")),
       ),
@@ -31,6 +28,16 @@ class DecksScreen extends StatelessWidget {
               bottom: BorderSide(color: Colors.black)
           )
       ),
+    );
+  }
+
+  void _navigateToSelectedDeckEntryScreen(BuildContext context, Deck deck) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                DeckEntryScreen(deck)
+        )
     );
   }
 
