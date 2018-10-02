@@ -39,4 +39,12 @@ class MockDecks extends Deck{
   static List<Deck> fetchDecks(){
     return decks;
   }
+
+  static void addDeck(String deckTitle) {
+    Deck newDeck = Deck(
+      deckTitle: deckTitle,
+      cards: <Card>[]
+    );
+    decks.add(newDeck);
+  }
 }

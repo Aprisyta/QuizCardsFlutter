@@ -1,6 +1,22 @@
 import 'package:flutter/material.dart';
+import './mocks/mock_decks.dart';
+import './model/deck.dart';
+import 'deck_entry_view.dart';
 
-class NewDeckScreen extends StatelessWidget {
+class NewDeckScreen extends StatefulWidget {
+  @override
+  _NewDeckScreenState createState() => _NewDeckScreenState();
+}
+
+class _NewDeckScreenState extends State<NewDeckScreen>{
+
+  final textController = TextEditingController();
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +49,12 @@ class NewDeckScreen extends StatelessWidget {
 
   Widget _textFieldNewDeckTab() {
     return TextField(
+      controller: textController,
       textAlign: TextAlign.center,
       autocorrect: true,
       style: TextStyle(
-          fontSize: 20.0
+        fontSize: 20.0,
+        color: Colors.black
       ),
       decoration: InputDecoration(
           hintText: "Deck Title",
@@ -62,7 +80,18 @@ class NewDeckScreen extends StatelessWidget {
       ),
       color: Colors.black,
       onPressed: () {
-        // add deck to decks
+        MockDecks.addDeck(textController.text);
+        textController.text = "";
+        List<Deck> decks = MockDecks.fetchDecks();
+        Deck deck = decks.elementAt(decks.length - 1);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    DeckEntryScreen(deck)
+            )
+        );
+        
       },
       textColor: Colors.white,
       padding: EdgeInsets.fromLTRB(40.0, 15.0, 40.0, 15.0),
