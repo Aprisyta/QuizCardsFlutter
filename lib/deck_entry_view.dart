@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './model/deck.dart';
+import 'new_add_card_view.dart';
 
 class DeckEntryScreen extends StatelessWidget {
 
@@ -50,7 +51,10 @@ class DeckEntryScreen extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    // add card to deck
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => NewCardScreen()),
+                    );
                   },
                   color: Colors.white,
                   textColor: Colors.black,
