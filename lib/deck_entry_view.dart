@@ -53,7 +53,7 @@ class DeckEntryScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => NewCardScreen()),
+                      MaterialPageRoute(builder: (context) => NewCardScreen(deck)),
                     );
                   },
                   color: Colors.white,

@@ -47,4 +47,16 @@ class MockDecks extends Deck{
     );
     decks.add(newDeck);
   }
+
+  static void addCard(String question, String answer, Deck deck) {
+    Card newCard = Card(
+      question: question,
+      answer: answer
+    );
+    decks.forEach((currentDeck) {
+      if(currentDeck.hashCode == deck.hashCode) {
+        currentDeck.cards.add(newCard);
+      }
+    });
+  }
 }
