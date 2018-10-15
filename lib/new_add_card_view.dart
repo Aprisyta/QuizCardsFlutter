@@ -113,14 +113,15 @@ class _NewAddCardScreenState extends State<NewCardScreen> {
         MockDecks.addCard(questionTextController.text, answerTextController.text, this.deck);
         questionTextController.text = "";
         answerTextController.text = "";
-        MockDecks.decks.forEach((deck) {
-          print(deck.deckTitle);
-          deck.cards.forEach((card) {
-            print(card.question);
-            print(card.answer);
-          });
-          print("___________________");
-        });
+        Navigator.pop(context);
+//        MockDecks.decks.forEach((deck) {
+//          print(deck.deckTitle);
+//          deck.cards.forEach((card) {
+//            print(card.question);
+//            print(card.answer);
+//          });
+//          print("___________________");
+//        });
       },
       textColor: Colors.white,
       padding: EdgeInsets.fromLTRB(40.0, 15.0, 40.0, 15.0),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './model/deck.dart';
 import 'new_add_card_view.dart';
+import './mocks/mock_decks.dart';
 
 class DeckEntryScreen extends StatelessWidget {
 
@@ -12,7 +13,13 @@ class DeckEntryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: true,
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              List<Deck> decks = MockDecks.fetchDecks();
+              Navigator.pop(context, decks);
+            }
+        ),
         title: Text("${deck.deckTitle}"),
       ),
       body: Padding(

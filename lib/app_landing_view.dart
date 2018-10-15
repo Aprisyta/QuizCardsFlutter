@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'decks_view.dart';
 import 'new_deck_view.dart';
+import './mocks/mock_decks.dart';
+import './model/deck.dart';
 
 class HomeScreen extends StatelessWidget {
+
+  final List<Deck> decks = MockDecks.fetchDecks();
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +24,7 @@ class HomeScreen extends StatelessWidget {
           ),
           body: TabBarView(
               children: <Widget>[
-                new DecksScreen(),
+                new DecksScreen(decks),
                 new NewDeckScreen(),
               ]
           ),

@@ -1,14 +1,38 @@
 import 'package:flutter/material.dart';
 import './model/deck.dart';
-import './mocks/mock_decks.dart';
 import 'deck_entry_view.dart';
+import './mocks/mock_decks.dart';
 
-class DecksScreen extends StatelessWidget {
+class DecksScreen extends StatefulWidget {
+  final List<Deck> decks;
 
-  final List<Deck> decks = MockDecks.fetchDecks();
+  DecksScreen(this.decks);
+
+  @override
+  _DecksScreenState createState() => _DecksScreenState(decks);
+
+
+}
+
+class _DecksScreenState extends State<DecksScreen> {
+
+//  final List<Deck> decks = MockDecks.fetchDecks();
+
+  List<Deck> decks;
+
+  _DecksScreenState(this.decks);
 
   @override
   Widget build(BuildContext context) {
+    MockDecks.decks.forEach((deck) {
+      print(deck.deckTitle);
+      deck.cards.forEach((card) {
+        print(card.question);
+        print(card.answer);
+        print("__-___-___-___-___-");
+      });
+      print("___________________");
+    });
     return new ListView.builder(
         itemCount: decks.length,
         itemBuilder: _deckListBuilder
@@ -31,8 +55,8 @@ class DecksScreen extends StatelessWidget {
     );
   }
 
-  void _navigateToSelectedDeckEntryScreen(BuildContext context, Deck deck) {
-    Navigator.push(
+  void _navigateToSelectedDeckEntryScreen(BuildContext context, Deck deck) async {
+    decks = await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) =>
