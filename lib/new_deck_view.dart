@@ -21,18 +21,22 @@ class _NewDeckScreenState extends State<NewDeckScreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: new Column(
-          children: <Widget>[
-            _infoTextNewDeckTab(),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15.0, 50.0, 15.0, 50.0),
-              child: _textFieldNewDeckTab(),
+      body: ListView(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: new Column(
+              children: <Widget>[
+                _infoTextNewDeckTab(),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15.0, 50.0, 15.0, 50.0),
+                  child: _textFieldNewDeckTab(),
+                ),
+              _submitButtonNewDeckTab()
+              ],
             ),
-            _submitButtonNewDeckTab()
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -1,5 +1,5 @@
-class Card {
+class QuizCard {
   String question;
   String answer;
-  Card({ this.question, this.answer });
+  QuizCard({ this.question, this.answer });
 }

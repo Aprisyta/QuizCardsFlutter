@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import './model/deck.dart';
 import 'deck_entry_view.dart';
-import './mocks/mock_decks.dart';
 
 class DecksScreen extends StatefulWidget {
   final List<Deck> decks;
@@ -10,29 +9,20 @@ class DecksScreen extends StatefulWidget {
 
   @override
   _DecksScreenState createState() => _DecksScreenState(decks);
-
-
 }
 
 class _DecksScreenState extends State<DecksScreen> {
-
-//  final List<Deck> decks = MockDecks.fetchDecks();
 
   List<Deck> decks;
 
   _DecksScreenState(this.decks);
 
   @override
+  void didUpdateWidget(DecksScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+  }
+  @override
   Widget build(BuildContext context) {
-    MockDecks.decks.forEach((deck) {
-      print(deck.deckTitle);
-      deck.cards.forEach((card) {
-        print(card.question);
-        print(card.answer);
-        print("__-___-___-___-___-");
-      });
-      print("___________________");
-    });
     return new ListView.builder(
         itemCount: decks.length,
         itemBuilder: _deckListBuilder
@@ -41,11 +31,12 @@ class _DecksScreenState extends State<DecksScreen> {
 
   Container _deckListBuilder(BuildContext context, int index) {
     Deck currentDeck = decks[index];
+    String deckCardCount = currentDeck.cards.length != null ? "${currentDeck.cards.length} cards" : "0 cards";
     return new Container(
       child: ListTile(
         onTap: () => _navigateToSelectedDeckEntryScreen(context, currentDeck),
         title: Center(child: Text("${currentDeck.deckTitle}")),
-        subtitle: Center(child: Text("${currentDeck.cards.length} cards")),
+        subtitle: Center(child: Text("$deckCardCount")),
       ),
       decoration: BoxDecoration(
           border: Border(

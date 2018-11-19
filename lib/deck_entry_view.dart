@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import './model/deck.dart';
 import 'new_add_card_view.dart';
 import './mocks/mock_decks.dart';
+import 'cards_view.dart';
 
 class DeckEntryScreen extends StatelessWidget {
 
@@ -20,6 +21,7 @@ class DeckEntryScreen extends StatelessWidget {
               Navigator.pop(context, decks);
             }
         ),
+        backgroundColor: Colors.black,
         title: Text("${deck.deckTitle}"),
       ),
       body: Padding(
@@ -84,7 +86,11 @@ class DeckEntryScreen extends StatelessWidget {
                 ),
                 color: Colors.black,
                 onPressed: () {
-                  // add card to deck
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DeckOfCardsScreen(deck)),
+                  );
+                  // start card quiz
                 },
                 textColor: Colors.white,
                 padding: EdgeInsets.fromLTRB(40.0, 15.0, 40.0, 15.0),

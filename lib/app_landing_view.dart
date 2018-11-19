@@ -14,6 +14,7 @@ class HomeScreen extends StatelessWidget {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.black,
             bottom: TabBar(
               tabs: <Widget>[
                 Tab(text: "Decks"),

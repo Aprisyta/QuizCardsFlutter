@@ -6,16 +6,16 @@ class MockDecks extends Deck{
   static final List<Deck> decks = [
     Deck(
       deckTitle: "Harry Potter Quiz",
-      cards: <Card>[
-        Card(
+      cards: <QuizCard>[
+        QuizCard(
           question: "Who is Ginny Weasely?",
           answer: "Weasely's youngest daughter."
         ),
-        Card(
+        QuizCard(
             question: "How many horcruxes are there?",
             answer: "7"
         ),
-        Card(
+        QuizCard(
           question: "Name of elf?",
           answer: "Dobby"
         )
@@ -23,12 +23,12 @@ class MockDecks extends Deck{
     ),
     Deck(
       deckTitle: "Maths",
-      cards: <Card> [
-        Card(
+      cards: <QuizCard> [
+        QuizCard(
           question: "2+5?",
           answer: "7",
         ),
-        Card(
+        QuizCard(
           question: "6+60",
           answer: "66"
         )
@@ -43,13 +43,13 @@ class MockDecks extends Deck{
   static void addDeck(String deckTitle) {
     Deck newDeck = Deck(
       deckTitle: deckTitle,
-      cards: <Card>[]
+      cards: <QuizCard>[]
     );
     decks.add(newDeck);
   }
 
   static void addCard(String question, String answer, Deck deck) {
-    Card newCard = Card(
+    QuizCard newCard = QuizCard(
       question: question,
       answer: answer
     );

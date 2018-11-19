@@ -9,14 +9,10 @@ class NewCardScreen extends StatefulWidget {
   NewCardScreen(this.deck);
 
   @override
-  _NewAddCardScreenState createState() => _NewAddCardScreenState(deck);
+  _NewAddCardScreenState createState() => _NewAddCardScreenState();
 }
 
 class _NewAddCardScreenState extends State<NewCardScreen> {
-
-  final Deck deck;
-
-  _NewAddCardScreenState(this.deck);
 
   final questionTextController = new TextEditingController();
   final answerTextController = new TextEditingController();
@@ -30,26 +26,32 @@ class _NewAddCardScreenState extends State<NewCardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Deck deck = widget.deck;
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: true,
           title: Text("Add Card"),
+          backgroundColor: Colors.black,
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: new Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15.0, 50.0, 15.0, 25.0),
-                child: _questionFieldNewCardScreen(),
+        body: ListView(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: new Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15.0, 50.0, 15.0, 25.0),
+                    child: _questionFieldNewCardScreen(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15.0, 25.0, 15.0, 50.0),
+                    child: _answerFieldNewCardScreen(),
+                  ),
+                  _submitButton(deck)
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15.0, 25.0, 15.0, 50.0),
-                child: _answerFieldNewCardScreen(),
-              ),
-              _submitButton()
-            ],
-          ),
+            ),
+          ],
         )
     );
   }
@@ -100,7 +102,7 @@ class _NewAddCardScreenState extends State<NewCardScreen> {
     );
   }
 
-  Widget _submitButton() {
+  Widget _submitButton(Deck deck) {
     return RaisedButton(
       child: Text(
         "Submit",
@@ -110,7 +112,7 @@ class _NewAddCardScreenState extends State<NewCardScreen> {
       ),
       color: Colors.black,
       onPressed: () {
-        MockDecks.addCard(questionTextController.text, answerTextController.text, this.deck);
+        MockDecks.addCard(questionTextController.text, answerTextController.text, deck);
         questionTextController.text = "";
         answerTextController.text = "";
         Navigator.pop(context);

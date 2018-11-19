@@ -2,7 +2,7 @@ import 'card.dart';
 
 class Deck {
   String deckTitle;
-  List<Card> cards;
+  List<QuizCard> cards;
 
   Deck({ this.deckTitle, this.cards });
 }
