@@ -21,6 +21,7 @@ class _DecksScreenState extends State<DecksScreen> {
   void didUpdateWidget(DecksScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
   }
+
   @override
   Widget build(BuildContext context) {
     return new ListView.builder(

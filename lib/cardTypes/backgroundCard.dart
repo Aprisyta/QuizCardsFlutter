@@ -11,7 +11,6 @@ Positioned backgroundCard(
     double skew,
     BuildContext context) {
   Size screenSize = MediaQuery.of(context).size;
-  print(card.question);
   return new Positioned(
     bottom: 100.0 + bottom,
     child: new Card(
@@ -32,8 +31,9 @@ Positioned backgroundCard(
               height: screenSize.height / 2.2,
               decoration: new BoxDecoration(
                 borderRadius: new BorderRadius.only(
-                    topLeft: new Radius.circular(8.0),
-                    topRight: new Radius.circular(8.0)),
+                  topLeft: new Radius.circular(8.0),
+                  topRight: new Radius.circular(8.0)
+                ),
               ),
             ),
             new Container(
