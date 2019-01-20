@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import './model/deck.dart';
 import './model/card.dart';
 import './cardTypes/activeQuizCard.dart';
-import './cardTypes/inactiveQuizCard.dart';
-import 'package:flutter/scheduler.dart' show timeDilation;
 import 'dart:async';
 
 class DeckOfCardsScreen extends StatefulWidget {
@@ -21,7 +19,9 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
   Deck deck;
 
   AnimationController controller;
-  Animation<double> right;
+  Animation<double> swipeHorizontal;
+  Animation<double> rotate;
+  Animation<double> swipeVertical;
   CurvedAnimation curvedAnimation;
   
   void initState() {
@@ -42,10 +42,41 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
         curve: Curves.ease,
     );
 
-    right = new Tween(
+    rotate = new Tween<double>(
+      begin: -0.0,
+      end: -40.0,
+    ).animate(
+      new CurvedAnimation(
+        parent: controller,
+        curve: Curves.ease,
+      ),
+    );
+
+    rotate.addListener(() {
+      setState(() {
+        if (rotate.isCompleted) {
+          setState(() {
+            deck.cards.removeLast();
+          });
+          controller.reset();
+        }
+      });
+    });
+
+    swipeHorizontal = new Tween(
       begin: 0.0,
       end: 400.0,
     ).animate(curvedAnimation);
+
+    swipeVertical = new Tween<double>(
+      begin: 15.0,
+      end: 100.0,
+    ).animate(
+      new CurvedAnimation(
+        parent: controller,
+        curve: Curves.ease,
+      ),
+    );
   }
 
   @override
@@ -62,12 +93,12 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
 
   dismissCard() {
     setState(() {
-      deck.cards.removeLast();
+      deck.cards.removeLast()
     });
   }
 
   swipeRight() {
-    print("Card right");
+    dismissCard();
     _swipeAnimation();
   }
 
@@ -87,17 +118,19 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
             alignment: Alignment.center,
             margin: EdgeInsets.all(20.0),
             child: _renderCards(),
-//          new Container(
-//            alignment: Alignment.center,
-//            child: new Row(
-//              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//              children: <Widget>[
-//                _renderFlatButton("Incorrect"),
-//                _renderFlatButton("Correct")
-//              ],
-//            ),
-//      )
-          )
+          ),
+          new Container(
+            alignment: Alignment.center,
+            child: deck.cards.length != 0
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          _renderFlatButton("Incorrect"),
+                          _renderFlatButton("Correct")
+                        ],
+                      )
+                    : null
+          ),
         ],
       ),
     );
@@ -109,6 +142,10 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
       return activeQuizCard (
         card,
         context,
+        swipeHorizontal.value,
+        0.0,
+        rotate.value,
+        rotate.value < -10 ? 0.1 : 0.0,
         index--,
         dismissCard,
       );
@@ -117,19 +154,19 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
 
   _renderCards() {
     return deck.cards.length != 0
-        ? new Stack (
-            alignment: Alignment.center,
-            children: _cardDeck(deck.cards),
+      ? new Stack (
+          alignment: Alignment.center,
+          children: _cardDeck(deck.cards),
+        )
+      : new Container (
+          child: Text (
+            "You are all caught up.",
+            style: TextStyle (
+              fontSize: 30.0,
+              color: Colors.red,
+            ),
           )
-        : new Container(
-            child: Text (
-              "You are all caught up.",
-              style: TextStyle (
-                fontSize: 30.0,
-                color: Colors.red,
-              ),
-            )
-           );
+        );
   }
 
   _renderFlatButton(String buttonText) {
@@ -242,13 +279,6 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
 //      index = index + 1;
 //    });
 //  }
-//
-//  addImg(QuizCard card) {
-//    setState(() {
-//
-//    });
-//  }
-//
 //
 //  swipeRight() {
 //    print("Hi");
