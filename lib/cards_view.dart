@@ -93,7 +93,7 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
 
   dismissCard() {
     setState(() {
-      deck.cards.removeLast()
+      deck.cards.removeLast();
     });
   }
 
