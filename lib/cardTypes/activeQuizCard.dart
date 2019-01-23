@@ -17,26 +17,47 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
   Offset cardOffset = const Offset(0.0, 0.0);
   Offset dragStart;
   Offset dragPosition;
-  Offset slideCard;
-  AnimationController slideCardController;
+  Offset slideCardBack;
+  AnimationController slideCardBackController;
+  Tween<Offset> slideOutTween;
+  AnimationController slideOutController;
 
 
   @override
   void initState() {
     super.initState();
-    slideCardController = new AnimationController(
+
+    slideCardBackController = new AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 1000),
     )
     ..addListener(() => setState(() {
-      cardOffset = Offset.lerp(slideCard, const Offset(0.0, 0.0), Curves.elasticInOut.transform(slideCardController.value));
+      cardOffset = Offset.lerp(slideCardBack, const Offset(0.0, 0.0), Curves.elasticInOut.transform(slideCardBackController.value));
     }))
     ..addStatusListener((AnimationStatus status) {
       if ( status == AnimationStatus.completed ) {
         setState(() {
           dragStart = null;
           dragPosition = null;
-          slideCard = null;
+          slideCardBack = null;
+        });
+      }
+    });
+
+    slideOutController = new AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    )
+    ..addListener(() => setState(() {
+      cardOffset = slideOutTween.evaluate(slideOutController);
+    }))
+    ..addStatusListener((AnimationStatus status) {
+      if ( status == AnimationStatus.completed ) {
+        setState(() {
+          dragStart = null;
+          dragPosition = null;
+          slideOutTween = null;
+          cardOffset = const Offset(0.0, 0.0);
         });
       }
     });
@@ -44,7 +65,7 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
 
   @override
   void dispose() {
-    slideCardController.dispose();
+    slideCardBackController.dispose();
     super.dispose();
   }
 
@@ -99,9 +120,9 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
   void _onPanStart(DragStartDetails details) {
     dragStart = details.globalPosition;
 
-    if (slideCardController.isAnimating) {
+    if (slideCardBackController.isAnimating) {
       setState(() {
-        slideCardController.stop(canceled: true);
+        slideCardBackController.stop(canceled: true);
       });
     }
   }
@@ -114,8 +135,26 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
   }
 
   void _onPanEnd(DragEndDetails details) {
-    slideCard = cardOffset;
-    slideCardController.forward(from: 0.0);
+    final dragVector = cardOffset / cardOffset.distance;
+//    print("dvx ${dragVector.dx}");
+    final isInCorrect = dragVector.dx < -0.5;
+    final isCorrect = dragVector.dx > 0.5;
+    print("cardoffset $cardOffset");
+    print("width ${context.size.width}");
+    setState(() {
+      if (isInCorrect || isCorrect) {
+        print("h");
+        slideOutTween = new Tween(
+          begin: cardOffset,
+          end: dragVector * (2 * context.size.width),
+        );
+        slideOutController.forward(from: 0.0);
+      }
+      else {
+        slideCardBack = cardOffset;
+        slideCardBackController.forward(from: 0.0);
+      }
+    });
   }
 
   double _rotation(dragBounds) {
