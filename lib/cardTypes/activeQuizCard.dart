@@ -136,14 +136,11 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
 
   void _onPanEnd(DragEndDetails details) {
     final dragVector = cardOffset / cardOffset.distance;
-//    print("dvx ${dragVector.dx}");
-    final isInCorrect = dragVector.dx < -0.5;
-    final isCorrect = dragVector.dx > 0.5;
-    print("cardoffset $cardOffset");
-    print("width ${context.size.width}");
+    final isInCorrect = (cardOffset.dx / context.size.width) < -0.45;
+    final isCorrect = (cardOffset.dx / context.size.width) > 0.45;
+
     setState(() {
       if (isInCorrect || isCorrect) {
-        print("h");
         slideOutTween = new Tween(
           begin: cardOffset,
           end: dragVector * (2 * context.size.width),
