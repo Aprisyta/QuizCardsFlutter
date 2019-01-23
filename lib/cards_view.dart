@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import './model/deck.dart';
 import './model/card.dart';
-import './cardTypes/activeQuizCard.dart';
+import 'cardTypes/activeQuizCard.dart';
 import 'dart:async';
 
 class DeckOfCardsScreen extends StatefulWidget {
@@ -63,7 +63,7 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
       });
     });
 
-    swipeHorizontal = new Tween(
+    swipeHorizontal = new Tween<double>(
       begin: 0.0,
       end: 400.0,
     ).animate(curvedAnimation);
@@ -86,6 +86,7 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
   }
 
   Future<Null> _swipeAnimation() async {
+    print("I am caled");
     try {
       await controller.forward();
     } on TickerCanceled {}
@@ -137,17 +138,9 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
   }
 
   _cardDeck(List<QuizCard> cards) {
-    int index = cards.length - 1;
     return deck.cards.map((card) {
-      return activeQuizCard (
-        card,
-        context,
-        swipeHorizontal.value,
-        0.0,
-        rotate.value,
-        rotate.value < -10 ? 0.1 : 0.0,
-        index--,
-        dismissCard,
+      return DraggableCard(
+          card: card
       );
     }).toList();
   }
