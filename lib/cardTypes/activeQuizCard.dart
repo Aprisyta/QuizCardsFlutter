@@ -12,11 +12,41 @@ class DraggableCard extends StatefulWidget {
   _DraggableCardState createState() => _DraggableCardState();
 }
 
-class _DraggableCardState extends State<DraggableCard> {
+class _DraggableCardState extends State<DraggableCard> with TickerProviderStateMixin {
 
   Offset cardOffset = const Offset(0.0, 0.0);
   Offset dragStart;
   Offset dragPosition;
+  Offset slideCard;
+  AnimationController slideCardController;
+
+
+  @override
+  void initState() {
+    super.initState();
+    slideCardController = new AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 1000),
+    )
+    ..addListener(() => setState(() {
+      cardOffset = Offset.lerp(slideCard, const Offset(0.0, 0.0), Curves.elasticInOut.transform(slideCardController.value));
+    }))
+    ..addStatusListener((AnimationStatus status) {
+      if ( status == AnimationStatus.completed ) {
+        setState(() {
+          dragStart = null;
+          dragPosition = null;
+          slideCard = null;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    slideCardController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +57,9 @@ class _DraggableCardState extends State<DraggableCard> {
     Size screenSize = MediaQuery.of(context).size;
     return new Positioned(
       child: Transform(
-          transform: Matrix4.translationValues(cardOffset.dx, cardOffset.dy, 0.0),
+          transform: Matrix4.translationValues(cardOffset.dx, cardOffset.dy, 0.0)
+              ..rotateZ(_rotation(screenSize)),
+          origin: _rotationOrigin(screenSize),
           child: GestureDetector(
             onPanStart: _onPanStart,
             onPanUpdate: _onPanUpdate,
@@ -66,6 +98,12 @@ class _DraggableCardState extends State<DraggableCard> {
 
   void _onPanStart(DragStartDetails details) {
     dragStart = details.globalPosition;
+
+    if (slideCardController.isAnimating) {
+      setState(() {
+        slideCardController.stop(canceled: true);
+      });
+    }
   }
 
   void _onPanUpdate(DragUpdateDetails details) {
@@ -76,10 +114,26 @@ class _DraggableCardState extends State<DraggableCard> {
   }
 
   void _onPanEnd(DragEndDetails details) {
-    setState(() {
-      dragStart = null;
-      dragPosition = null;
-      cardOffset = const Offset(0.0, 0.0);
-    });
+    slideCard = cardOffset;
+    slideCardController.forward(from: 0.0);
   }
+
+  double _rotation(dragBounds) {
+    if (dragStart != null) {
+      double screenWidth = MediaQuery
+          .of(context)
+          .size
+          .width;
+      double screenHeight = MediaQuery
+          .of(context)
+          .size
+          .height;
+      int rotationCornerMultiplier = dragStart.dy >= screenHeight/2 ? -1 : 1;
+      return (pi / 8) * (cardOffset.dx / screenWidth ) * rotationCornerMultiplier;
+    }
+    else
+      return 0.0;
+  }
+
+  Offset _rotationOrigin(dragBounds) => dragStart != null ? dragStart : const Offset(0.0, 0.0);
 }
