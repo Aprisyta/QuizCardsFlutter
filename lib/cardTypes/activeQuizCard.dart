@@ -1,12 +1,14 @@
 import 'dart:math';
 import '../model/card.dart';
 import 'package:flutter/material.dart';
+import 'package:quiz_cards_flutter/answer.dart';
 
 class DraggableCard extends StatefulWidget {
 
   final QuizCard card;
+  final Answer answer;
 
-  const DraggableCard({Key key, this.card}) : super(key: key);
+  const DraggableCard({Key key, this.card, this.answer}) : super(key: key);
 
   @override
   _DraggableCardState createState() => _DraggableCardState();
@@ -14,6 +16,7 @@ class DraggableCard extends StatefulWidget {
 
 class _DraggableCardState extends State<DraggableCard> with TickerProviderStateMixin {
 
+  GlobalKey cardKey = new GlobalKey(debugLabel: 'card_key');
   Offset cardOffset = const Offset(0.0, 0.0);
   Offset dragStart;
   Offset dragPosition;
@@ -21,13 +24,13 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
   AnimationController slideCardBackController;
   Tween<Offset> slideOutTween;
   AnimationController slideOutController;
-
+  UserAnswer userAnswer;
 
   @override
   void initState() {
     super.initState();
 
-    slideCardBackController = new AnimationController(
+    slideCardBackController = new AnimationController (
       vsync: this,
       duration: Duration(milliseconds: 1000),
     )
@@ -44,7 +47,7 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
       }
     });
 
-    slideOutController = new AnimationController(
+    slideOutController = new AnimationController (
       vsync: this,
       duration: Duration(milliseconds: 500),
     )
@@ -52,19 +55,26 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
       cardOffset = slideOutTween.evaluate(slideOutController);
     }))
     ..addStatusListener((AnimationStatus status) {
-      if ( status == AnimationStatus.completed ) {
+      if (status == AnimationStatus.completed) {
         setState(() {
           dragStart = null;
           dragPosition = null;
           slideOutTween = null;
           cardOffset = const Offset(0.0, 0.0);
+
+          widget.answer.reset();
         });
       }
     });
+
+
+    widget.answer.addListener(onAnswerChange);
+    userAnswer = widget.answer.userAnswer;
   }
 
   @override
   void dispose() {
+    widget.answer.removeListener(onAnswerChange);
     slideCardBackController.dispose();
     super.dispose();
   }
@@ -76,8 +86,7 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
 
   Widget draggableCard (QuizCard card) {
     Size screenSize = MediaQuery.of(context).size;
-    return new Positioned(
-      child: Transform(
+    return new Transform(
           transform: Matrix4.translationValues(cardOffset.dx, cardOffset.dy, 0.0)
               ..rotateZ(_rotation(screenSize)),
           origin: _rotationOrigin(screenSize),
@@ -88,13 +97,14 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
             onTap: () {
               //  flip card
             },
-            child: new Card(
+            child: new Card (
+              key: cardKey,
               color: Colors.red,
-              shape: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
+              shape: OutlineInputBorder (
+                  borderRadius: BorderRadius.all (
                     Radius.circular(20.0),
                   ),
-                  borderSide: BorderSide(
+                  borderSide: BorderSide (
                     color: Colors.black,
                   )
               ),
@@ -113,7 +123,6 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
               ),
             ),
           ),
-        ),
     );
   }
 
@@ -139,7 +148,7 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
     final isInCorrect = (cardOffset.dx / context.size.width) < -0.45;
     final isCorrect = (cardOffset.dx / context.size.width) > 0.45;
 
-    setState(() {
+    setState (() {
       if (isInCorrect || isCorrect) {
         slideOutTween = new Tween(
           begin: cardOffset,
@@ -154,7 +163,7 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
     });
   }
 
-  double _rotation(dragBounds) {
+  double _rotation (dragBounds) {
     if (dragStart != null) {
       double screenWidth = MediaQuery
           .of(context)
@@ -172,4 +181,40 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
   }
 
   Offset _rotationOrigin(dragBounds) => dragStart != null ? dragStart : const Offset(0.0, 0.0);
+
+  void onAnswerChange() {
+    if (widget.answer.userAnswer != userAnswer) {
+      switch (widget.answer.userAnswer) {
+        case UserAnswer.correct:
+          swipeRight();
+          break;
+        case UserAnswer.incorrect:
+          swipeLeft();
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  void swipeRight() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    dragStart = chooseRandomPosition();
+    slideOutTween = new Tween(begin: const Offset(0.0, 0.0), end: new Offset(2 * screenWidth, 0.0));
+    slideOutController.forward(from: 0.0);
+  }
+
+  void swipeLeft() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    dragStart = chooseRandomPosition();
+    slideOutTween = new Tween(begin: const Offset(0.0, 0.0), end: new Offset(-2 * screenWidth, 0.0));
+    slideOutController.forward(from: 0.0);
+  }
+
+  Offset chooseRandomPosition() {
+    final cardContext = cardKey.currentContext;
+    final cardTopLeft = (cardContext.findRenderObject() as RenderBox).localToGlobal(const Offset(0.0, 0.0));
+    final dragStartY = (cardContext.size.height * (new Random().nextDouble())) + cardTopLeft.dy;
+    return new Offset(cardContext.size.width/2 + cardTopLeft.dx, dragStartY);
+  }
 }
