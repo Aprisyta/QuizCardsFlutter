@@ -25,6 +25,10 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
   Tween<Offset> slideOutTween;
   AnimationController slideOutController;
   UserAnswer userAnswer;
+//  AnimationController flipCardController;
+//  double degrees;
+  bool isShowingAnswer = false;
+//  Tween<double> flipCard;
 
   @override
   void initState() {
@@ -67,6 +71,18 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
       }
     });
 
+//    flipCardController = new AnimationController(
+//      vsync: this,
+//      duration: Duration(milliseconds: 1000),
+//    )
+//    ..addListener(() => setState(() {
+//      isShowingAnswer =
+//    }))
+//
+//    RotationTransition(
+//      turns: Tween(begin: 0.0, end: 1.0).animate(flipCardController),
+//    );
+
 
     widget.answer.addListener(onAnswerChange);
     userAnswer = widget.answer.userAnswer;
@@ -94,25 +110,20 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
             onPanStart: _onPanStart,
             onPanUpdate: _onPanUpdate,
             onPanEnd: _onPanEnd,
-            onTap: () {
-              //  flip card
-            },
+            onTap: _flipCard,
             child: new Card (
               key: cardKey,
-              color: Colors.red,
+              color: isShowingAnswer ? Colors.deepPurple : Colors.red,
               shape: OutlineInputBorder (
                   borderRadius: BorderRadius.all (
                     Radius.circular(20.0),
                   ),
-                  borderSide: BorderSide (
-                    color: Colors.black,
-                  )
               ),
               child: new Container(
                 height: screenSize.height/2.0,
                 alignment: Alignment.center,
                 child: Text(
-                  "${card.question}",
+                  isShowingAnswer ? "${card.answer}" : "${card.question}",
                   style: TextStyle(
                     fontSize: 30.0,
                     color: Colors.white,
@@ -150,7 +161,7 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
 
     setState (() {
       if (isInCorrect || isCorrect) {
-        slideOutTween = new Tween(
+        slideOutTween = new Tween (
           begin: cardOffset,
           end: dragVector * (2 * context.size.width),
         );
@@ -160,6 +171,14 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
         slideCardBack = cardOffset;
         slideCardBackController.forward(from: 0.0);
       }
+    });
+  }
+
+
+  void _flipCard () {
+//    flipCardController.forward(from: 0.0);
+    setState(() {
+      isShowingAnswer = !isShowingAnswer;
     });
   }
 
