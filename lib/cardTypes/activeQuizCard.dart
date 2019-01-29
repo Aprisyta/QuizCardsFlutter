@@ -25,10 +25,7 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
   Tween<Offset> slideOutTween;
   AnimationController slideOutController;
   UserAnswer userAnswer;
-//  AnimationController flipCardController;
-//  double degrees;
   bool isShowingAnswer = false;
-//  Tween<double> flipCard;
 
   @override
   void initState() {
