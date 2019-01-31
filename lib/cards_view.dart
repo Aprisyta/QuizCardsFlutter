@@ -18,6 +18,10 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
 
   Deck deck;
 
+//  Card currentCard;
+
+//  Card nextCard;
+
   Answer userAnswer = new Answer();
   
   void initState() {
@@ -81,15 +85,10 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
 
   _renderCards() {
     return deck.cards.length != 0
-      ? DraggableCard(
-          card: deck.cards[0],
-          answer: userAnswer,
+      ? new Stack (
+          alignment: Alignment.center,
+          children: _cardDeck(deck.cards),
         )
-
-//    new Stack (
-//          alignment: Alignment.center,
-//          children: _cardDeck(deck.cards),
-//        )
       : new Container (
           child: Text (
             "You are all caught up.",
