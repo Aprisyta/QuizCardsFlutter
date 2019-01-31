@@ -7,8 +7,8 @@ class DraggableCard extends StatefulWidget {
 
   final QuizCard card;
   final Answer answer;
-
-  const DraggableCard({Key key, this.card, this.answer}) : super(key: key);
+  final bool isDraggable;
+  const DraggableCard({Key key, this.card, this.answer, this.isDraggable}) : super(key: key);
 
   @override
   _DraggableCardState createState() => _DraggableCardState();
@@ -199,16 +199,18 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
   Offset _rotationOrigin(dragBounds) => dragStart != null ? dragStart : const Offset(0.0, 0.0);
 
   void onAnswerChange() {
-    if (widget.answer.userAnswer != userAnswer) {
-      switch (widget.answer.userAnswer) {
-        case UserAnswer.correct:
-          swipeRight();
-          break;
-        case UserAnswer.incorrect:
-          swipeLeft();
-          break;
-        default:
-          break;
+    if (widget.isDraggable) {
+      if (widget.answer.userAnswer != userAnswer) {
+        switch (widget.answer.userAnswer) {
+          case UserAnswer.correct:
+            swipeRight();
+            break;
+          case UserAnswer.incorrect:
+            swipeLeft();
+            break;
+          default:
+            break;
+        }
       }
     }
   }

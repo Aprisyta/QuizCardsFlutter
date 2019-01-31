@@ -18,6 +18,8 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
 
   Deck deck;
 
+  int activeCardIndex;
+
 //  Card currentCard;
 
 //  Card nextCard;
@@ -31,6 +33,8 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
       deckTitle: widget.deck.deckTitle,
       cards: widget.deck.cards,
     );
+
+    activeCardIndex = widget.deck.cards.length - 1;
   }
 
 
@@ -51,10 +55,10 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
             margin: EdgeInsets.all(20.0),
             child: _renderCards(),
           ),
-          new Container(
+          new Container (
             alignment: Alignment.center,
             child: deck.cards.length != 0
-                    ? Row(
+                    ? Row (
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           _renderFlatButton("Incorrect"),
@@ -75,10 +79,15 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
 //      answer: userAnswer,
 //    );
 
+//    List<QuizCard> cardDeck = new List();
+
+
+    int currentCardIndex = 0;
     return cards.map((card) {
       return DraggableCard(
         card: card,
         answer: userAnswer,
+        isDraggable: currentCardIndex++ == activeCardIndex ? true : false,
       );
     }).toList();
   }
