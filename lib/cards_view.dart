@@ -20,10 +20,6 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
 
   int activeCardIndex;
 
-//  Card currentCard;
-
-//  Card nextCard;
-
   Answer userAnswer = new Answer();
   
   void initState() {
@@ -47,7 +43,7 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
         title: new Text("${deck.deckTitle}"),
         centerTitle: true,
       ),
-      body: Column(
+      body: Column (
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           new Container (
@@ -73,21 +69,14 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
   }
 
   _cardDeck(List<QuizCard> cards) {
-
-//    return DraggableCard(
-//      card: cards[0],
-//      answer: userAnswer,
-//    );
-
-//    List<QuizCard> cardDeck = new List();
-
-
+    print("Hi");
     int currentCardIndex = 0;
     return cards.map((card) {
-      return DraggableCard(
+      return DraggableCard (
         card: card,
         answer: userAnswer,
         isDraggable: currentCardIndex++ == activeCardIndex ? true : false,
+        onSlideOutComplete: _onSlideOutComplete,
       );
     }).toList();
   }
@@ -110,7 +99,7 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
   }
 
   _renderFlatButton(String buttonText) {
-    return FlatButton(
+    return FlatButton (
       onPressed: () {
         buttonText == "Correct" ? userAnswer.correct() : userAnswer.incorrect();
       },
@@ -126,10 +115,15 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
       ),
       padding: EdgeInsets.symmetric(
-          vertical: 10.0,
-          horizontal: 30.0
+        vertical: 10.0,
+        horizontal: 30.0
       ),
     );
   }
 
+  _onSlideOutComplete() {
+    setState(() {
+      activeCardIndex = activeCardIndex--;
+    });
+  }
 }

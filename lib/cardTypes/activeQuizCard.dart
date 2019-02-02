@@ -8,7 +8,17 @@ class DraggableCard extends StatefulWidget {
   final QuizCard card;
   final Answer answer;
   final bool isDraggable;
-  const DraggableCard({Key key, this.card, this.answer, this.isDraggable}) : super(key: key);
+  final Function onSlideOutComplete;
+//  final Function onSlideUpdate;
+
+  const DraggableCard({
+    Key key,
+    this.card,
+    this.answer,
+    this.isDraggable,
+    this.onSlideOutComplete,
+//    this.onSlideUpdate
+  }) : super(key: key);
 
   @override
   _DraggableCardState createState() => _DraggableCardState();
@@ -37,6 +47,10 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
     )
     ..addListener(() => setState(() {
       cardOffset = Offset.lerp(slideCardBack, const Offset(0.0, 0.0), Curves.elasticInOut.transform(slideCardBackController.value));
+
+//      if (widget.onSlideUpdate != null) {
+//        widget.onSlideUpdate(cardOffset.distance);
+//      }
     }))
     ..addStatusListener((AnimationStatus status) {
       if ( status == AnimationStatus.completed ) {
@@ -54,6 +68,10 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
     )
     ..addListener(() => setState(() {
       cardOffset = slideOutTween.evaluate(slideOutController);
+
+//      if (widget.onSlideUpdate != null) {
+//        widget.onSlideUpdate(cardOffset.distance);
+//      }
     }))
     ..addStatusListener((AnimationStatus status) {
       if (status == AnimationStatus.completed) {
@@ -61,9 +79,12 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
           dragStart = null;
           dragPosition = null;
           slideOutTween = null;
-          cardOffset = const Offset(0.0, 0.0);
 
-          widget.answer.reset();
+          if (widget.onSlideOutComplete != null) {
+            widget.onSlideOutComplete(
+                // TODO: slideDirection
+            );
+          }
         });
       }
     });
@@ -149,6 +170,10 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
       dragPosition = details.globalPosition;
       cardOffset = dragPosition - dragStart;
     });
+
+//    if (widget.onSlideUpdate != null) {
+//      widget.onSlideUpdate(cardOffset.distance);
+//    }
   }
 
   void _onPanEnd(DragEndDetails details) {
