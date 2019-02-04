@@ -20,11 +20,10 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
 
   int activeCardIndex;
 
-  Answer userAnswer = new Answer();
+  Answer userAnswer;
   
   void initState() {
     super.initState();
-
     deck = new Deck(
       deckTitle: widget.deck.deckTitle,
       cards: widget.deck.cards,
@@ -36,7 +35,7 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
 
   @override
   Widget build(BuildContext context) {
-    print(deck.cards.length);
+    print(activeCardIndex);
     return new Scaffold(
       appBar: new AppBar(
         automaticallyImplyLeading: true,
@@ -68,17 +67,25 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
     );
   }
 
+  //   1 0
+  //
   _cardDeck(List<QuizCard> cards) {
-    print("Hi");
+    print("deck");
     int currentCardIndex = 0;
-    return cards.map((card) {
-      return DraggableCard (
-        card: card,
-        answer: userAnswer,
-        isDraggable: currentCardIndex++ == activeCardIndex ? true : false,
-        onSlideOutComplete: _onSlideOutComplete,
-      );
-    }).toList();
+    List<DraggableCard> newCardDeck = new List();
+    for (QuizCard card in cards) {
+      if (currentCardIndex <= activeCardIndex) {
+        userAnswer = new Answer();
+        DraggableCard x = new DraggableCard(
+          card: card,
+          answer: userAnswer,
+          isDraggable: currentCardIndex++ == activeCardIndex ? true : false,
+          onSlideOutComplete: _onSlideOutComplete,
+        );
+        newCardDeck.add(x);
+      }
+    }
+    return newCardDeck.toList();
   }
 
   _renderCards() {
@@ -122,8 +129,9 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
   }
 
   _onSlideOutComplete() {
+    print("called");
     setState(() {
-      activeCardIndex = activeCardIndex--;
+      activeCardIndex = activeCardIndex - 1;
     });
   }
 }

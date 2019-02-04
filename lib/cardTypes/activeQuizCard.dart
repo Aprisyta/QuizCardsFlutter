@@ -107,6 +107,17 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
   }
 
   @override
+  void didUpdateWidget(DraggableCard oldWidget) {
+    if (oldWidget.isDraggable != widget.isDraggable) {
+      oldWidget.answer.removeListener(onAnswerChange);
+      widget.answer.addListener(onAnswerChange);
+      userAnswer = widget.answer.userAnswer;
+      print(userAnswer);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void dispose() {
     widget.answer.removeListener(onAnswerChange);
     slideCardBackController.dispose();
@@ -225,6 +236,7 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
 
   void onAnswerChange() {
     if (widget.isDraggable) {
+      print("Hi");
       if (widget.answer.userAnswer != userAnswer) {
         switch (widget.answer.userAnswer) {
           case UserAnswer.correct:
