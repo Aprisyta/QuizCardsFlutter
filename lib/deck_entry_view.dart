@@ -90,7 +90,6 @@ class DeckEntryScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(builder: (context) => DeckOfCardsScreen(deck)),
                   );
-                  // start card quiz
                 },
                 textColor: Colors.white,
                 padding: EdgeInsets.fromLTRB(40.0, 15.0, 40.0, 15.0),

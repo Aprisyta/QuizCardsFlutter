@@ -28,10 +28,8 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
       deckTitle: widget.deck.deckTitle,
       cards: widget.deck.cards,
     );
-
     activeCardIndex = widget.deck.cards.length - 1;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -42,30 +40,66 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
         title: new Text("${deck.deckTitle}"),
         centerTitle: true,
       ),
-      body: Column (
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: activeCardIndex == -1 ? <Widget>[Text('Yo')] :
-
-        <Widget>[
-          new Container (
-            alignment: Alignment.center,
-            margin: EdgeInsets.all(20.0),
-            child: _renderCards(),
-          ),
-          new Container (
-            alignment: Alignment.center,
-            child: deck.cards.length != 0
-                    ? Row (
+      body:
+        Center(
+          child: activeCardIndex == -1
+            ? Column (
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text(
+                    'You are all caught up',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Colors.purple,
+                      fontSize: 30.0,
+                    ),
+                  ),
+                  new Container (
+                      alignment: Alignment.center,
+                      child: FlatButton(
+                        color: Colors.black,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'Go Back',
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 30.0
+                        ),
+                      )
+                  ),
+                ],
+              )
+            : Column (
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  new Container (
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.all(20.0),
+                    child: _renderCards(),
+                  ),
+                  new Container (
+                      alignment: Alignment.center,
+                      child: Row (
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           _renderFlatButton("Incorrect"),
                           _renderFlatButton("Correct")
                         ],
                       )
-                    : null
-          ),
-        ],
-      ),
+                  ),
+                ],
+              ),
+        ),
     );
   }
 
@@ -120,10 +154,10 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
           color: Colors.white,
         ),
       ),
-      shape: RoundedRectangleBorder(
+      shape: RoundedRectangleBorder (
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
       ),
-      padding: EdgeInsets.symmetric(
+      padding: EdgeInsets.symmetric (
         vertical: 10.0,
         horizontal: 30.0
       ),
