@@ -44,7 +44,9 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
       ),
       body: Column (
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
+        children: activeCardIndex == -1 ? <Widget>[Text('Yo')] :
+
+        <Widget>[
           new Container (
             alignment: Alignment.center,
             margin: EdgeInsets.all(20.0),
