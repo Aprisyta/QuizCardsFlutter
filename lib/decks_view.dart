@@ -36,13 +36,33 @@ class _DecksScreenState extends State<DecksScreen> {
     return new Container(
       child: ListTile(
         onTap: () => _navigateToSelectedDeckEntryScreen(context, currentDeck),
-        title: Center(child: Text("${currentDeck.deckTitle}")),
-        subtitle: Center(child: Text("$deckCardCount")),
+        title: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "${currentDeck.deckTitle}",
+                style: TextStyle(
+                  fontSize: 30,
+                ),
+              ),
+            )
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
+          child: Center(
+              child: Text(
+                "$deckCardCount",
+                style: TextStyle(
+                  fontSize: 20
+                ),
+              )
+          ),
+        ),
       ),
       decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(color: Colors.black)
-          )
+        border: Border(
+            bottom: BorderSide(color: Colors.black)
+        ),
       ),
     );
   }

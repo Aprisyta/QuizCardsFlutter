@@ -29,11 +29,52 @@ class MockDecks extends Deck{
           answer: "7",
         ),
         QuizCard(
-          question: "6+60",
+          question: "6+60?",
           answer: "66"
         )
       ]
-    )
+    ),
+    Deck(
+      deckTitle: "Game of Thrones",
+      cards: <QuizCard> [
+        QuizCard(
+            question: "How many dragons Danerys had?",
+            answer: "3 :("
+        ),
+        QuizCard(
+            question: "Lion is the sigil of ______ house",
+            answer: "Lanisters"
+        ),
+        QuizCard(
+            question: "How many dragons Danerys had?",
+            answer: "3 :("
+        ),
+        QuizCard(
+            question: "Lion is the sigil of ______ house",
+            answer: "Lanisters"
+        ),
+        QuizCard(
+          question: "How many dragons Danerys had?",
+          answer: "3 :("
+        ),
+        QuizCard(
+          question: "Lion is the sigil of ______ house",
+          answer: "Lanisters"
+        ),
+        QuizCard(
+            question: "Number of Stark siblings left?",
+            answer: "2"
+        ),
+        QuizCard(
+          question: "Season 8 Episode 1 airs on?",
+          answer: "April 14",
+        ),
+        QuizCard(
+            question: "You know nothing, _____?",
+            answer: "Jon Snow"
+        ),
+      ]
+    ),
   ];
 
   static List<Deck> fetchDecks(){

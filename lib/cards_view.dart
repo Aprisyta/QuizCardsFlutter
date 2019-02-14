@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import './model/deck.dart';
 import './model/card.dart';
-import 'cardTypes/activeQuizCard.dart';
+import 'package:quiz_cards_flutter/activeQuizCard.dart';
 import 'package:quiz_cards_flutter/answer.dart';
 
 class DeckOfCardsScreen extends StatefulWidget {
@@ -39,7 +39,9 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
         automaticallyImplyLeading: true,
         title: new Text("${deck.deckTitle}"),
         centerTitle: true,
+        backgroundColor: Colors.black,
       ),
+      backgroundColor: Colors.amber[700],
       body:
         Center(
           child: activeCardIndex == -1
@@ -103,8 +105,6 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
     );
   }
 
-  //   1 0
-  //
   _cardDeck(List<QuizCard> cards) {
     print("deck");
     int currentCardIndex = 0;
@@ -146,7 +146,7 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
       onPressed: () {
         buttonText == "Correct" ? userAnswer.correct() : userAnswer.incorrect();
       },
-      color: buttonText == "Correct" ? Colors.green : Colors.red,
+      color: buttonText == "Correct" ? Colors.green[800] : Colors.red[800],
       child: Text(
         "$buttonText",
         style: TextStyle(
@@ -156,6 +156,11 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
       ),
       shape: RoundedRectangleBorder (
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        side: BorderSide(
+          color: Colors.white,
+          style: BorderStyle.solid,
+          width: 2,
+        )
       ),
       padding: EdgeInsets.symmetric (
         vertical: 10.0,
@@ -165,7 +170,6 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
   }
 
   _onSlideOutComplete() {
-    print("called");
     setState(() {
       activeCardIndex = activeCardIndex - 1;
     });

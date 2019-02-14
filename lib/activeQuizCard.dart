@@ -1,5 +1,5 @@
 import 'dart:math';
-import '../model/card.dart';
+import './model/card.dart';
 import 'package:flutter/material.dart';
 import 'package:quiz_cards_flutter/answer.dart';
 
@@ -9,7 +9,6 @@ class DraggableCard extends StatefulWidget {
   final Answer answer;
   final bool isDraggable;
   final Function onSlideOutComplete;
-//  final Function onSlideUpdate;
 
   const DraggableCard({
     Key key,
@@ -17,7 +16,6 @@ class DraggableCard extends StatefulWidget {
     this.answer,
     this.isDraggable,
     this.onSlideOutComplete,
-//    this.onSlideUpdate
   }) : super(key: key);
 
   @override
@@ -47,10 +45,6 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
     )
     ..addListener(() => setState(() {
       cardOffset = Offset.lerp(slideCardBack, const Offset(0.0, 0.0), Curves.elasticInOut.transform(slideCardBackController.value));
-
-//      if (widget.onSlideUpdate != null) {
-//        widget.onSlideUpdate(cardOffset.distance);
-//      }
     }))
     ..addStatusListener((AnimationStatus status) {
       if ( status == AnimationStatus.completed ) {
@@ -68,10 +62,6 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
     )
     ..addListener(() => setState(() {
       cardOffset = slideOutTween.evaluate(slideOutController);
-
-//      if (widget.onSlideUpdate != null) {
-//        widget.onSlideUpdate(cardOffset.distance);
-//      }
     }))
     ..addStatusListener((AnimationStatus status) {
       if (status == AnimationStatus.completed) {
@@ -88,19 +78,6 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
         });
       }
     });
-
-//    flipCardController = new AnimationController(
-//      vsync: this,
-//      duration: Duration(milliseconds: 1000),
-//    )
-//    ..addListener(() => setState(() {
-//      isShowingAnswer =
-//    }))
-//
-//    RotationTransition(
-//      turns: Tween(begin: 0.0, end: 1.0).animate(flipCardController),
-//    );
-
 
     widget.answer.addListener(onAnswerChange);
     userAnswer = widget.answer.userAnswer;
@@ -142,23 +119,31 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
             onTap: _flipCard,
             child: new Card (
               key: cardKey,
-              color: isShowingAnswer ? Colors.deepPurple : Colors.red,
+              color: isShowingAnswer ? Colors.pink : Colors.deepPurple[800],
               shape: OutlineInputBorder (
-                  borderRadius: BorderRadius.all (
-                    Radius.circular(20.0),
-                  ),
+                borderRadius: BorderRadius.all (
+                  Radius.circular(20.0),
+                ),
+                borderSide: BorderSide(
+                  color: Colors.white,
+                  style: BorderStyle.solid,
+                  width: 4,
+                )
               ),
-              child: new Container(
-                height: screenSize.height/2.0,
-                alignment: Alignment.center,
-                child: Text(
-                  isShowingAnswer ? "${card.answer}" : "${card.question}",
-                  style: TextStyle(
-                    fontSize: 30.0,
-                    color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: new Container(
+                  height: screenSize.height/2.0,
+                  alignment: Alignment.center,
+                  child: Text(
+                    isShowingAnswer ? "${card.answer}" : "${card.question}",
+                    style: TextStyle(
+                      fontSize: 30.0,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                    softWrap: true,
                   ),
-                  textAlign: TextAlign.center,
-                  softWrap: true,
                 ),
               ),
             ),
@@ -181,10 +166,6 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
       dragPosition = details.globalPosition;
       cardOffset = dragPosition - dragStart;
     });
-
-//    if (widget.onSlideUpdate != null) {
-//      widget.onSlideUpdate(cardOffset.distance);
-//    }
   }
 
   void _onPanEnd(DragEndDetails details) {
@@ -209,7 +190,6 @@ class _DraggableCardState extends State<DraggableCard> with TickerProviderStateM
 
 
   void _flipCard () {
-//    flipCardController.forward(from: 0.0);
     setState(() {
       isShowingAnswer = !isShowingAnswer;
     });

@@ -15,11 +15,11 @@ class DeckEntryScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              List<Deck> decks = MockDecks.fetchDecks();
-              Navigator.pop(context, decks);
-            }
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            List<Deck> decks = MockDecks.fetchDecks();
+            Navigator.pop(context, decks);
+          },
         ),
         backgroundColor: Colors.black,
         title: Text("${deck.deckTitle}"),
