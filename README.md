@@ -12,4 +12,4 @@ To launch this project on your machine:
 
 ## References
 
-- [Tinder like swipe animation] (https://www.youtube.com/watch?v=NMHhzd5ewP4)
+- [Tinder like swipe animation](https://www.youtube.com/watch?v=NMHhzd5ewP4)
