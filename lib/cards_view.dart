@@ -39,7 +39,7 @@ class DeckOfCardsScreenState extends State<DeckOfCardsScreen> with TickerProvide
         automaticallyImplyLeading: true,
         title: new Text("${deck.deckTitle}"),
         centerTitle: true,
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.amber[900],
       ),
       backgroundColor: Colors.amber[700],
       body:
