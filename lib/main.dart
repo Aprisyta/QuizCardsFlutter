@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'app_landing_view.dart';
-import 'decks_view.dart';
 
 void main() => runApp(new QuizCards());
 

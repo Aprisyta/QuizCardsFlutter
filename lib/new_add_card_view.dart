@@ -28,6 +28,7 @@ class _NewAddCardScreenState extends State<NewCardScreen> {
   Widget build(BuildContext context) {
     Deck deck = widget.deck;
     return Scaffold(
+      resizeToAvoidBottomPadding: true,
         appBar: AppBar(
           automaticallyImplyLeading: true,
           title: Text("Add Card"),
@@ -116,14 +117,6 @@ class _NewAddCardScreenState extends State<NewCardScreen> {
         questionTextController.text = "";
         answerTextController.text = "";
         Navigator.pop(context);
-//        MockDecks.decks.forEach((deck) {
-//          print(deck.deckTitle);
-//          deck.cards.forEach((card) {
-//            print(card.question);
-//            print(card.answer);
-//          });
-//          print("___________________");
-//        });
       },
       textColor: Colors.white,
       padding: EdgeInsets.fromLTRB(40.0, 15.0, 40.0, 15.0),
